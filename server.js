@@ -18,17 +18,15 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
-  let currentData;
   const newNote = req.body;
 
   fs.readFile("./db/db.json", (err, data) => {
-    currentData = JSON.parse(data);
-    currentData.push(newNote);
-    // const data = currentData.map(item => {
-    //   return {...item, id: }
-    // })
-
-    fs.writeFile("./db/db.json", JSON.stringify(currentData), (err) => {
+    const currentData = JSON.parse(data);
+    currentData.push(newNote)
+    const newData = currentData.map(item => {
+      return {...item, id: Math.ceil(Math.random() * 50)}
+    })
+    fs.writeFile("./db/db.json", JSON.stringify(newData), (err) => {
       err ? console.error(err) : console.log("success");
     });
   });
