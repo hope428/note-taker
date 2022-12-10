@@ -24,14 +24,31 @@ app.post("/api/notes", (req, res) => {
   fs.readFile("./db/db.json", (err, data) => {
     currentData = JSON.parse(data);
     currentData.push(newNote);
+    // const data = currentData.map(item => {
+    //   return {...item, id: }
+    // })
 
     fs.writeFile("./db/db.json", JSON.stringify(currentData), (err) => {
       err ? console.error(err) : console.log("success");
     });
   });
 
-  res.sendFile(path.join(__dirname, "/public/notes.html"));
+  res.redirect(path.join(__dirname, "/public/notes.html"));
 });
+
+app.delete("/api/notes/:id", (req, res) => {
+  const id = req.params.id
+  for(let i = 0; i < notes.length; i++){
+    if(notes[i].id === id){
+      notes.splice(i, 1)
+    }
+  }
+
+  fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
+    err ? console.error(err) : console.log("note removed");
+  })
+  res.redirect(path.join(__dirname, "/public/notes.html"));
+})
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
