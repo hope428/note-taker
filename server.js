@@ -24,7 +24,7 @@ app.post("/api/notes", (req, res) => {
     const currentData = JSON.parse(data);
     currentData.push(newNote)
     const newData = currentData.map(item => {
-      return {...item, id: Math.ceil(Math.random() * 50)}
+      return {...item, id: Math.ceil(Math.random() * 50).toString()}
     })
     fs.writeFile("./db/db.json", JSON.stringify(newData), (err) => {
       err ? console.error(err) : console.log("success");
@@ -36,7 +36,6 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:id", (req, res) => {
   const id = req.params.id
-  
   notes.forEach((note, i) => note.id === id ? notes.splice(i, 1): console.log("not found"));
 
   fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
