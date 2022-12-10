@@ -19,10 +19,9 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
-  const newNote = req.body;
+  const newNote = {...req.body, id: nanoid()};
   notes.push(newNote);
-  const newData = notes.map((item) => ({ ...item, id: nanoid() }));
-  fs.writeFile("./db/db.json", JSON.stringify(newData), (err) => {
+  fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
     err ? console.error(err) : console.log("success");
   });
 
