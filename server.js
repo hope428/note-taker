@@ -38,11 +38,8 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:id", (req, res) => {
   const id = req.params.id
-  for(let i = 0; i < notes.length; i++){
-    if(notes[i].id === id){
-      notes.splice(i, 1)
-    }
-  }
+  
+  notes.forEach((note, i) => note.id === id ? notes.splice(i, 1): console.log("not found"));
 
   fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
     err ? console.error(err) : console.log("note removed");
