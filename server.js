@@ -19,7 +19,7 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
-  const newNote = {...req.body, id: nanoid()};
+  const newNote = { ...req.body, id: nanoid() };
   notes.push(newNote);
   fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
     err ? console.error(err) : console.log("success");
@@ -30,7 +30,6 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:id", (req, res) => {
   const id = req.params.id;
-  console.log(id);
   notes.forEach((note, i) =>
     note.id === id ? notes.splice(i, 1) : console.log("not found")
   );
