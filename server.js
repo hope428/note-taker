@@ -4,6 +4,7 @@ const PORT = 3001;
 const path = require("path");
 const fs = require("fs");
 const notes = require("./db/db.json");
+const nanoid = require('nanoid')
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -24,7 +25,7 @@ app.post("/api/notes", (req, res) => {
     const currentData = JSON.parse(data);
     currentData.push(newNote)
     const newData = currentData.map(item => {
-      return {...item, id: Math.ceil(Math.random() * 50).toString()}
+      return {...item, id: nanoid()}
     })
     fs.writeFile("./db/db.json", JSON.stringify(newData), (err) => {
       err ? console.error(err) : console.log("success");
