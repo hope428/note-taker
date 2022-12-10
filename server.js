@@ -25,7 +25,7 @@ app.post("/api/notes", (req, res) => {
     err ? console.error(err) : console.log("success");
   });
 
-  res.redirect(path.join(__dirname, "/public/notes.html"));
+  res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
 app.delete("/api/notes/:id", (req, res) => {
@@ -37,7 +37,7 @@ app.delete("/api/notes/:id", (req, res) => {
   fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
     err ? console.error(err) : console.log("note removed");
   });
-  res.redirect(path.join(__dirname, "/public/notes.html"));
+  res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
 app.get("*", (req, res) => {
