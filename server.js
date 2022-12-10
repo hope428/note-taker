@@ -4,7 +4,7 @@ const PORT = 3001;
 const path = require("path");
 const fs = require("fs");
 const notes = require("./db/db.json");
-const nanoid = require('nanoid')
+const nanoid = require("nanoid");
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -20,30 +20,27 @@ app.get("/api/notes", (req, res) => {
 
 app.post("/api/notes", (req, res) => {
   const newNote = req.body;
-
-  fs.readFile("./db/db.json", (err, data) => {
-    const currentData = JSON.parse(data);
-    currentData.push(newNote)
-    const newData = currentData.map(item => {
-      return {...item, id: nanoid()}
-    })
-    fs.writeFile("./db/db.json", JSON.stringify(newData), (err) => {
-      err ? console.error(err) : console.log("success");
-    });
+  notes.push(newNote);
+  const newData = notes.map((item) => ({ ...item, id: nanoid() }));
+  fs.writeFile("./db/db.json", JSON.stringify(newData), (err) => {
+    err ? console.error(err) : console.log("success");
   });
 
   res.redirect(path.join(__dirname, "/public/notes.html"));
 });
 
 app.delete("/api/notes/:id", (req, res) => {
-  const id = req.params.id
-  notes.forEach((note, i) => note.id === id ? notes.splice(i, 1): console.log("not found"));
+  const id = req.params.id;
+  console.log(id);
+  notes.forEach((note, i) =>
+    note.id === id ? notes.splice(i, 1) : console.log("not found")
+  );
 
   fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
     err ? console.error(err) : console.log("note removed");
-  })
+  });
   res.redirect(path.join(__dirname, "/public/notes.html"));
-})
+});
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
